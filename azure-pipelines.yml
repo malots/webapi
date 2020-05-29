@@ -31,7 +31,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: pack
-    packagesToPack: '/Malots.WebAPI/*.csproj'
+    packagesToPack: '**/Malots.WebAPI.csproj'
 
 - task: VSTest@2
   inputs:
