@@ -28,6 +28,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    packagesToPack: '**/*.csproj'
+
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
