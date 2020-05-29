@@ -5,6 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>WebApi tool</Description>
+    <IsPackable>true</IsPackable>
+    <Version>1.0.0</Version>
     <Copyright>malots</Copyright>
     <Authors>leovene</Authors>
     <Company>malots</Company>
