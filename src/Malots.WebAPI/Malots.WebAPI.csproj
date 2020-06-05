@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>WebApi tool</Description>
     <Copyright>malots</Copyright>
     <Authors>leovene</Authors>
     <Company>malots</Company>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
