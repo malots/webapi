@@ -38,3 +38,9 @@ steps:
     command: 'pack'
     packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
     versioningScheme: 'off'
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
