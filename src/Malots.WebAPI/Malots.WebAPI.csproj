@@ -8,6 +8,7 @@
     <Copyright>malots</Copyright>
     <Authors>leovene</Authors>
     <Company>malots</Company>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
