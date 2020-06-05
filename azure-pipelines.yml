@@ -40,8 +40,8 @@ steps:
     versioningScheme: 'off'
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '**/*.nupkg'
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
     includeRootFolder: true
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/package.zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     replaceExistingArchive: true
