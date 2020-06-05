@@ -38,10 +38,3 @@ steps:
     command: 'pack'
     packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
     versioningScheme: 'off'
-- task: DotNetCoreCLI@2
-  displayName: 'Push'
-  inputs:
-    command: push
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.symbols.nupkg'
-    nuGetFeedType: external
-    publishFeedCredentials: nugetmalots
