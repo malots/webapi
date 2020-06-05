@@ -36,5 +36,5 @@ steps:
   displayName: 'Pack'
   inputs:
     command: 'pack'
-    packagesToPack: '**/Malots.WebAPI.csproj'
+    packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
     versioningScheme: 'off'
