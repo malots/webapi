@@ -37,7 +37,7 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
-    versioningScheme: 'off'steps:
+    versioningScheme: 'off'
 - task: DotNetCoreCLI@2
   displayName: 'Push'
   inputs:
