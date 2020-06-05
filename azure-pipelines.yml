@@ -32,9 +32,3 @@ steps:
     command: 'test'
     projects: '$(solution)'
     testRunTitle: 'Running tests'
-- task: DotNetCoreCLI@2
-  displayName: 'Pack'
-  inputs:
-    command: 'pack'
-    packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
-    versioningScheme: 'off'
