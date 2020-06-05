@@ -37,11 +37,12 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '**/src/Malots.WebAPI/Malots.WebAPI.csproj'
-    versioningScheme: 'off'
-- task: ArchiveFiles@2
+    versioningScheme: 'off'steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Push'
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    replaceExistingArchive: true
+    command: push
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg;!$(Build.ArtifactStagingDirectory)/*.symbols.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: nugetmalots
+    
