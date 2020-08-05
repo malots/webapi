@@ -5,7 +5,6 @@ using Malots.WebAPI.Domain.Interfaces.Business;
 using Malots.WebAPI.Domain.Interfaces.Infra;
 using Malots.WebAPI.Domain.RepositoryModels;
 using Malots.WebAPI.Domain.WorkModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -33,13 +32,15 @@ namespace Malots.WebAPI.Business.Logics
             Logger = NullLogger<BaseLogic<TWorkModel, TRepositoryModel>>.Instance;
         }
 
-        public virtual async Task<IEnumerable<TWorkModel>> Get(QueryTakeEnum take, QuerySkipEnum skip)
+        public virtual async Task<IEnumerable<TWorkModel>> Get(QueryTakeEnum take, QuerySkipEnum skip, bool track = true)
         {
-            var result = await _repository.Select().Skip((int)skip).Take((int)take).ToArrayAsync().ConfigureAwait(false);
+            var result = track
+                ? await _repository.SelectTracked(take, skip).ConfigureAwait(false)
+                : await _repository.SelectUntracked(take, skip).ConfigureAwait(false);
             return result.Select(r => _mapper.Map<TWorkModel>(r));
         }
 
-        public virtual async Task<TWorkModel> Get(Guid id)
+        public virtual async Task<TWorkModel> Get(Guid id, bool track = true)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -47,9 +48,11 @@ namespace Malots.WebAPI.Business.Logics
             Logger.LogInformation(
                 $"Get entity information with Id = {id}");
 
-            var result = await _repository.Select(id).ToArrayAsync().ConfigureAwait(false);
+            var result = track
+                ? await _repository.SelectTracked(id).ConfigureAwait(false)
+                : await _repository.SelectUntracked(id).ConfigureAwait(false);
 
-            return _mapper.Map<TWorkModel>(result.FirstOrDefault());
+            return _mapper.Map<TWorkModel>(result);
         }
 
         public virtual async Task<Guid> Post(TWorkModel model)

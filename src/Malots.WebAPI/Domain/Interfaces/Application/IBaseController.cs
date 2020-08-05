@@ -8,9 +8,9 @@ namespace Malots.WebAPI.Domain.Interfaces.Application
 {
     public interface IBaseController<TViewModel, TWorkModel> where TViewModel : IViewModel where TWorkModel : IWorkModel
     {
-        Task<IEnumerable<TViewModel>> Get(QueryTakeEnum take = QueryTakeEnum.Fifteen, QuerySkipEnum skip = QuerySkipEnum.None);
+        Task<IEnumerable<TViewModel>> Get(QueryTakeEnum take = QueryTakeEnum.Fifteen, QuerySkipEnum skip = QuerySkipEnum.None, bool track = true);
 
-        Task<TViewModel> Get(string id);
+        Task<TViewModel> Get(string id, bool track  = true);
 
         Task<string> Post([FromBody] TViewModel viewModel);
 

@@ -1,4 +1,5 @@
-﻿using Malots.WebAPI.Domain.Interfaces.Infra;
+﻿using Malots.WebAPI.Domain.Enums;
+using Malots.WebAPI.Domain.Interfaces.Infra;
 using Malots.WebAPI.Domain.RepositoryModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -22,44 +23,74 @@ namespace Malots.WebAPI.Infra.Data.Repositories
             DbSet = Context != null ? Context.Set<TRepositoryModel>() : throw new ArgumentNullException(nameof(context));
         }
 
-        public IQueryable<TRepositoryModel> Select() => DbSet;
-
-        public IQueryable<TRepositoryModel> Select(Guid id) => DbSet.Where(e => e.Id == id);
-
-        public Guid Insert(TRepositoryModel entity)
+        public async Task<IEnumerable<TRepositoryModel>> SelectTracked(QueryTakeEnum take, QuerySkipEnum skip)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            DbSet.Add(entity);
-
-            return entity.Id;
+            return await DbSet
+                .Skip((int)skip)
+                .Take((int)take)
+                .ToArrayAsync()
+                .ConfigureAwait(false);
         }
 
-        public IEnumerable<Guid> Insert(IEnumerable<TRepositoryModel> entities)
+        public async Task<TRepositoryModel> SelectTracked(Guid id)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-
-            DbSet.AddRange(entities);
-
-            return entities.Select(e => e.Id);
+            return await DbSet
+                .SingleOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
         }
 
-        public void Update(TRepositoryModel entity)
+        public async Task<IEnumerable<TRepositoryModel>> SelectUntracked(QueryTakeEnum take, QuerySkipEnum skip)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-
-            DbSet.Update(entity);
+            return await DbSet
+                .Skip((int)skip)
+                .Take((int)take)
+                .AsNoTracking()
+                .ToArrayAsync()
+                .ConfigureAwait(false);
         }
 
-        public void Update(IEnumerable<TRepositoryModel> entities)
+        public async Task<TRepositoryModel> SelectUntracked(Guid id)
         {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
+            return await DbSet
+                .AsNoTracking()
+                .SingleOrDefaultAsync(m => m.Id == id)
+                .ConfigureAwait(false);
+        }
 
-            DbSet.UpdateRange(entities);
+        public Guid Insert(TRepositoryModel model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            DbSet.Add(model);
+
+            return model.Id;
+        }
+
+        public IEnumerable<Guid> Insert(IEnumerable<TRepositoryModel> models)
+        {
+            if (models == null)
+                throw new ArgumentNullException(nameof(models));
+
+            DbSet.AddRange(models);
+
+            return models.Select(e => e.Id);
+        }
+
+        public void Update(TRepositoryModel model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            DbSet.Update(model);
+        }
+
+        public void Update(IEnumerable<TRepositoryModel> models)
+        {
+            if (models == null)
+                throw new ArgumentNullException(nameof(models));
+
+            DbSet.UpdateRange(models);
         }
 
         public void Delete(Guid id)
@@ -67,7 +98,9 @@ namespace Malots.WebAPI.Infra.Data.Repositories
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
 
-            DbSet.Remove(Select(id).First());
+            var model = DbSet.SingleOrDefault(m => m.Id == id);
+
+            DbSet.Remove(model);
         }
 
         public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
