@@ -22,7 +22,7 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task GetByQuantityTest()
         {
             //arrange
-            _mockedLogic.Setup(x => x.Get(It.IsAny<QueryTakeEnum>(), It.IsAny<QuerySkipEnum>())).ReturnsAsync(new List<IWorkModel>() { new Mock<IWorkModel>().Object });
+            _mockedLogic.Setup(x => x.Get(It.IsAny<QueryTakeEnum>(), It.IsAny<QuerySkipEnum>(), true)).ReturnsAsync(new List<IWorkModel>() { new Mock<IWorkModel>().Object });
 
             //act
             var getResult = await _mockedLogic.Object.Get(QueryTakeEnum.One, QuerySkipEnum.None);
@@ -37,7 +37,7 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task GetByIdTest()
         {
             //arrange
-            _mockedLogic.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(new Mock<IWorkModel>().Object);
+            _mockedLogic.Setup(x => x.Get(It.IsAny<Guid>(), true)).ReturnsAsync(new Mock<IWorkModel>().Object);
 
             //act
             var result = await _mockedLogic.Object.Get(new Guid());
@@ -109,11 +109,11 @@ namespace Malots.WebAPI.Tests.Domain
         [Fact]
         public async Task DeleteModelTest()
         {
-            var guid = new Guid();
+            var mockedModel = new Mock<IWorkModel>();
             _mockedLogic.Setup(x => x.Delete(It.IsAny<Guid>())).ReturnsAsync(new Random().Next(1, int.MaxValue));
 
             //act
-            var result = await _mockedLogic.Object.Delete(guid);
+            var result = await _mockedLogic.Object.Delete(mockedModel.Object.Id);
 
             //assert
             Assert.True(result > 0);

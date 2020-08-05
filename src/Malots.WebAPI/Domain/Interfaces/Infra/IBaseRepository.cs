@@ -1,23 +1,27 @@
-﻿using System;
+﻿using Malots.WebAPI.Domain.Enums;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Malots.WebAPI.Domain.Interfaces.Infra
 {
     public interface IBaseRepository<TRepositoryModel> where TRepositoryModel : IRepositoryModel
     {
-        IQueryable<TRepositoryModel> Select();
+        Task<IEnumerable<TRepositoryModel>> SelectTracked(QueryTakeEnum take, QuerySkipEnum skip);
 
-        IQueryable<TRepositoryModel> Select(Guid id);
+        Task<TRepositoryModel> SelectTracked(Guid id);
 
-        Guid Insert(TRepositoryModel entity);
+        Task<IEnumerable<TRepositoryModel>> SelectUntracked(QueryTakeEnum take, QuerySkipEnum skip);
 
-        IEnumerable<Guid> Insert(IEnumerable<TRepositoryModel> entities);
+        Task<TRepositoryModel> SelectUntracked(Guid id);
 
-        void Update(TRepositoryModel entity);
+        Guid Insert(TRepositoryModel model);
 
-        void Update(IEnumerable<TRepositoryModel> entities);
+        IEnumerable<Guid> Insert(IEnumerable<TRepositoryModel> models);
+
+        void Update(TRepositoryModel model);
+
+        void Update(IEnumerable<TRepositoryModel> models);
 
         void Delete(Guid id);
 

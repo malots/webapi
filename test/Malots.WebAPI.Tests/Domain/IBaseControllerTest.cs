@@ -23,7 +23,7 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task GetByQuantityTest()
         {
             //arrange
-            _mockedController.Setup(x => x.Get(It.IsAny<QueryTakeEnum>(), It.IsAny<QuerySkipEnum>())).ReturnsAsync(new List<IViewModel>() { new Mock<IViewModel>().Object });
+            _mockedController.Setup(x => x.Get(It.IsAny<QueryTakeEnum>(), It.IsAny<QuerySkipEnum>(), true)).ReturnsAsync(new List<IViewModel>() { new Mock<IViewModel>().Object });
 
             //act
             var getResult = await _mockedController.Object.Get(QueryTakeEnum.One, QuerySkipEnum.None);
@@ -38,7 +38,7 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task GetByIdTest()
         {
             //arrange
-            _mockedController.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new Mock<IViewModel>().Object);
+            _mockedController.Setup(x => x.Get(It.IsAny<string>(), true)).ReturnsAsync(new Mock<IViewModel>().Object);
 
             //act
             var result = await _mockedController.Object.Get(new Guid().ToString());
@@ -98,10 +98,11 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task DeleteModelTest()
         {
             //arrange
-            _mockedController.Setup(x => x.Delete(It.IsAny<string>())).ReturnsAsync(new Random().Next(1, int.MaxValue));
+            var mockedViewModel = new Mock<IViewModel>();
+            _mockedController.Setup(x => x.Delete(It.IsAny<String>())).ReturnsAsync(new Random().Next(1, int.MaxValue));
 
             //act
-            var result = await _mockedController.Object.Delete(new Guid().ToString());
+            var result = await _mockedController.Object.Delete(mockedViewModel.Object.Id);
 
             //assert
             Assert.True(result > 0);

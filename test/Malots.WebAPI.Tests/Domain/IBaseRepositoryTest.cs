@@ -1,4 +1,5 @@
-﻿using Malots.WebAPI.Domain.Interfaces.Infra;
+﻿using Malots.WebAPI.Domain.Enums;
+using Malots.WebAPI.Domain.Interfaces.Infra;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -18,29 +19,29 @@ namespace Malots.WebAPI.Tests.Domain
         }
 
         [Fact]
-        public void SelectAllTest()
+        public async Task SelectAllTest()
         {
             //arrange
-            _mockedRepository.Setup(x => x.Select()).Returns(new List<IRepositoryModel>() { new Mock<IRepositoryModel>().Object }.AsQueryable());
+            _mockedRepository.Setup(x => x.SelectTracked(It.IsAny<QueryTakeEnum>(), It.IsAny<QuerySkipEnum>())).ReturnsAsync(new List<IRepositoryModel>() { new Mock<IRepositoryModel>().Object }.AsEnumerable());
 
             //act
-            var result = _mockedRepository.Object.Select().ToArray();
+            var result = await _mockedRepository.Object.SelectTracked(QueryTakeEnum.Fifty, QuerySkipEnum.None);
 
             //assert
             Assert.Single(result);
         }
 
         [Fact]
-        public void SelectByIdTest()
+        public async Task SelectByIdTest()
         {
             //arrange
-            _mockedRepository.Setup(x => x.Select(It.IsAny<Guid>())).Returns(new List<IRepositoryModel>() { new Mock<IRepositoryModel>().Object }.AsQueryable());
+            _mockedRepository.Setup(x => x.SelectTracked(It.IsAny<Guid>())).ReturnsAsync(new Mock<IRepositoryModel>().Object);
 
             //act
-            var result = _mockedRepository.Object.Select(new Guid()).ToArray();
+            var result = await _mockedRepository.Object.SelectTracked(new Guid());
 
             //assert
-            Assert.Single(result);
+            Assert.NotNull(result);
         }
 
 
@@ -99,20 +100,6 @@ namespace Malots.WebAPI.Tests.Domain
 
             //assert
             _mockedRepository.Verify(x => x.Update(It.IsAny<IEnumerable<IRepositoryModel>>()), Times.Once);
-        }
-
-        [Fact]
-        public void DeleteEntityTest()
-        {
-            //arrange
-            var guid = new Guid();
-            _mockedRepository.Setup(x => x.Delete(It.IsAny<Guid>())).Verifiable();
-
-            //act
-            _mockedRepository.Object.Delete(guid);
-
-            //assert
-            _mockedRepository.Verify(x => x.Delete(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]

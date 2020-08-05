@@ -30,11 +30,17 @@ namespace Malots.WebAPI.Application.Controllers
 
         // GET: api/Model
         [HttpGet]
-        public async Task<IEnumerable<TViewModel>> Get(QueryTakeEnum take = QueryTakeEnum.Fifteen, QuerySkipEnum skip = QuerySkipEnum.None) => (await _logic.Get(take, skip).ConfigureAwait(false)).Select(m => _mapper.Map<TViewModel>(m));
+        public async Task<IEnumerable<TViewModel>> Get(QueryTakeEnum take = QueryTakeEnum.Fifteen, QuerySkipEnum skip = QuerySkipEnum.None, bool track = true)
+        {
+            return (await _logic.Get(take, skip, track).ConfigureAwait(false)).Select(m => _mapper.Map<TViewModel>(m));
+        }
 
         // GET: api/Model/5
         [HttpGet("{id}")]
-        public async Task<TViewModel> Get(string id) => _mapper.Map<TViewModel>(await _logic.Get(Guid.Parse(id)).ConfigureAwait(false));
+        public async Task<TViewModel> Get(string id, bool track)
+        {
+            return _mapper.Map<TViewModel>(await _logic.Get(Guid.Parse(id), track).ConfigureAwait(false));
+        }
 
         // POST: api/Model
         [HttpPost]
@@ -58,6 +64,9 @@ namespace Malots.WebAPI.Application.Controllers
         [HttpPut("{id}")]
         public async Task<int> Put(string id, [FromBody] TViewModel viewModel)
         {
+            if (viewModel != null && id != viewModel.Id)
+                throw new ArgumentException(nameof(id));
+
             return await _logic.Put(_mapper.Map<TWorkModel>(viewModel)).ConfigureAwait(false);
         }
 

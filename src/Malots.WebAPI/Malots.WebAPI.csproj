@@ -9,6 +9,7 @@
     <Authors>leovene</Authors>
     <Company>malots</Company>
     <IsPackable>true</IsPackable>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
