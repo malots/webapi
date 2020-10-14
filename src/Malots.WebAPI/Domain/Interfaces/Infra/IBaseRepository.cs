@@ -25,10 +25,6 @@ namespace Malots.WebAPI.Domain.Interfaces.Infra
 
         void Delete(Guid id);
 
-        Task<int> SaveChangesAsync();
-
-        int SaveChanges();
-
         void Dispose();
     }
 }

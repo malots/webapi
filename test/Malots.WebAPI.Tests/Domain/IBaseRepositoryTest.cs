@@ -12,10 +12,12 @@ namespace Malots.WebAPI.Tests.Domain
     public sealed class IRepositoryTest
     {
         private readonly Mock<IBaseRepository<IRepositoryModel>> _mockedRepository;
+        private readonly Mock<IUnityOfWork> _mockedUnityOfWork;
 
         public IRepositoryTest()
         {
             _mockedRepository = new Mock<IBaseRepository<IRepositoryModel>>();
+            _mockedUnityOfWork = new Mock<IUnityOfWork>();
         }
 
         [Fact]
@@ -106,23 +108,10 @@ namespace Malots.WebAPI.Tests.Domain
         public async Task SaveAsyncTest()
         {
             //arrange
-            _mockedRepository.Setup(x => x.SaveChangesAsync()).ReturnsAsync(new Random().Next);
+            _mockedUnityOfWork.Setup(x => x.Commit()).ReturnsAsync(new Random().Next);
             
             //act
-            var result = await _mockedRepository.Object.SaveChangesAsync().ConfigureAwait(false);
-
-            //assert
-            Assert.IsType<int>(result);
-        }
-
-        [Fact]
-        public void SaveSyncTest()
-        {
-            //arrange
-            _mockedRepository.Setup(x => x.SaveChanges()).Verifiable();
-
-            //act
-            var result = _mockedRepository.Object.SaveChanges();
+            var result = await _mockedUnityOfWork.Object.Commit().ConfigureAwait(false);
 
             //assert
             Assert.IsType<int>(result);
