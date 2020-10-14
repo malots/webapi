@@ -103,10 +103,17 @@ namespace Malots.WebAPI.Infra.Data.Repositories
             DbSet.Remove(model);
         }
 
-        public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
+        //public Task<int> SaveChangesAsync() => Context.SaveChangesAsync();
 
-        public int SaveChanges() => Context.SaveChanges();
+        //public int SaveChanges() => Context.SaveChanges();
 
-        public void Dispose() => Context.Dispose();
+        public void Dispose()
+        {
+            if (Context != null)
+            {
+                Context.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
     }
 }
