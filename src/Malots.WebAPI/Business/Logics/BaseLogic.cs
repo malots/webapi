@@ -18,15 +18,17 @@ namespace Malots.WebAPI.Business.Logics
     [DebuggerDisplay("BaseLogic: {TWorkModel} - {TRepositoryModel}")]
     public abstract class BaseLogic<TWorkModel, TRepositoryModel> : IBaseLogic<TWorkModel> where TWorkModel : WorkModel where TRepositoryModel : RepositoryModel, new()
     {
+        private readonly IUnityOfWork _uow;
         private readonly IBaseRepository<TRepositoryModel> _repository;
         private readonly IValidator<TWorkModel> _validator;
         private readonly IMapper _mapper;
 
         public ILogger<BaseLogic<TWorkModel, TRepositoryModel>> Logger { get; set; }
 
-        public BaseLogic(IBaseRepository<TRepositoryModel> repository, IValidator<TWorkModel> validator, IMapper mapper)
+        public BaseLogic(IUnityOfWork uow, IBaseRepository<TRepositoryModel> repository, IValidator<TWorkModel> validator, IMapper mapper)
         {
-            _repository = repository;
+            _uow = uow;
+             _repository = repository;
             _validator = validator;
             _mapper = mapper;
             Logger = NullLogger<BaseLogic<TWorkModel, TRepositoryModel>>.Instance;
@@ -63,7 +65,7 @@ namespace Malots.WebAPI.Business.Logics
 
             _repository.Insert(entity);
 
-            await _repository.SaveChangesAsync().ConfigureAwait(false);
+            await _uow.Commit().ConfigureAwait(false);
 
             Logger.LogInformation(
                 $"It was created the entity = {entity}");
@@ -85,7 +87,7 @@ namespace Malots.WebAPI.Business.Logics
 
             _repository.Insert(entities);
 
-            await _repository.SaveChangesAsync().ConfigureAwait(false);
+            await _uow.Commit().ConfigureAwait(false);
 
             Logger.LogInformation(
                 $"It was created a range of entities");
@@ -107,7 +109,7 @@ namespace Malots.WebAPI.Business.Logics
             Logger.LogInformation(
                 $"Updated an entity with id = {entity.Id}");
 
-            return await _repository.SaveChangesAsync().ConfigureAwait(false);
+            return await _uow.Commit().ConfigureAwait(false);
         }
 
         public virtual async Task<int> Put(IEnumerable<TWorkModel> models)
@@ -127,7 +129,7 @@ namespace Malots.WebAPI.Business.Logics
             Logger.LogInformation(
                  $"It was Updated a range of entities");
 
-            return await _repository.SaveChangesAsync().ConfigureAwait(false);
+            return await _uow.Commit().ConfigureAwait(false);
         }
 
         public virtual async Task<int> Delete(Guid id)
@@ -140,7 +142,7 @@ namespace Malots.WebAPI.Business.Logics
 
             _repository.Delete(id);
 
-            return await _repository.SaveChangesAsync().ConfigureAwait(false);
+            return await _uow.Commit().ConfigureAwait(false);
         }
 
         private void Validate(TWorkModel model, IValidator<TWorkModel> validator)
