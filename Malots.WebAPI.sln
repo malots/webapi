@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Malots.WebAPI", "src\Malots
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{82BCD801-2A91-45D9-8437-271903BF44B4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{277C3F2A-4C9E-4C59-BFF6-B242E7F81EC1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{277C3F2A-4C9E-4C59-BFF6-B242E7F81EC1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Malots.WebAPI.Tests", "test\Malots.WebAPI.Tests\Malots.WebAPI.Tests.csproj", "{765CC2D5-3D25-463A-8EAA-FD3CD18E9767}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Malots.WebAPI.Tests", "tests\Malots.WebAPI.Tests\Malots.WebAPI.Tests.csproj", "{765CC2D5-3D25-463A-8EAA-FD3CD18E9767}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{996169A9-640C-48B3-B537-940CE2D31637}"
 	ProjectSection(SolutionItems) = preProject
